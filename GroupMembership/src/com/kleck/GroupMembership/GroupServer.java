@@ -113,4 +113,8 @@ public class GroupServer {
 	public boolean isContact() {
 		return this.isContact;
 	}
+	
+	public String getProcessId() {
+		return this.processId;
+	}
 }
