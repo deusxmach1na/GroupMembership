@@ -16,7 +16,7 @@ public class RandomGossipThread extends Thread {
 	
 	public RandomGossipThread (GroupServer gs) {
 		this.gs = gs;
-		this.numGossips = (int) Math.log(gs.getMembershipList().size());
+		this.numGossips = 2;
 	}
 	
 	public void run() {
@@ -33,10 +33,11 @@ public class RandomGossipThread extends Thread {
 		for(int i=0;i<numGossips;i++) {
 			int n = rand.nextInt(keys.size());
 			String randomId = randomKeys.get(n);
-			if(!completedGossips.contains(randomId)) {
+			if(!completedGossips.contains(randomId) && !randomId.equals(this.gs.getProcessId())) {
 				String ipAddress = this.gs.getMembershipList().getMember(randomId).getIpAddress();
 				int portNumber = this.gs.getMembershipList().getMember(randomId).getPortNumber();
 				GossipSendThread gst = new GossipSendThread(ipAddress, portNumber, this.gs.getMembershipList());
+				System.out.println("sending thread started");
 				gst.start();
 			}
 		}

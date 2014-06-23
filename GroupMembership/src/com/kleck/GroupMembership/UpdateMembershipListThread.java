@@ -22,12 +22,14 @@ public class UpdateMembershipListThread extends Thread {
 		for(String key: this.gs.getMembershipList().getKeys()) {
 			long compareTime = this.gs.getMembershipList().getMember(key).getTimeStamp();
 			//mark as deletable if it's been timeFail milliseconds
-			if((currentTime - compareTime) > timeFail) {
+			if((currentTime - compareTime) > timeFail && !key.equals(this.gs.getProcessId())) {
 				this.gs.getMembershipList().getMember(key).setDeletable(true);
+				System.out.println(key + " DELETE");
 			}			
 			//delete if it is marked as isDeletable and has passed 2 * timeFail milliseconds
 			if((currentTime - compareTime) > 2 * timeFail && this.gs.getMembershipList().getMember(key).isDeletable()) {
-				this.gs.getMembershipList().removeMember(key);;
+				this.gs.getMembershipList().removeMember(key);
+				System.out.println(key + " REMOVE");
 			}		
 			
 		}

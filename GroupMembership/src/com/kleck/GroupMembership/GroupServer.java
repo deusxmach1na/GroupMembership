@@ -9,6 +9,9 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class GroupServer {
 	private boolean isContact;
@@ -51,6 +54,14 @@ public class GroupServer {
 			gst.start();
 		}
 		
+
+		//schedule threads to run
+		ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(3);
+		scheduledThreadPool.scheduleAtFixedRate(new UpdateHeartbeatThread(this), 0, new Long(this.props.getProperty("timeUpdateHeartbeat")), TimeUnit.MILLISECONDS);
+		scheduledThreadPool.scheduleAtFixedRate(new RandomGossipThread(this), 0, new Long(this.props.getProperty("timeGossip")), TimeUnit.MILLISECONDS);
+		scheduledThreadPool.scheduleAtFixedRate(new UpdateMembershipListThread(this, new Long(this.props.getProperty("timeFail"))), 0, new Long(this.props.getProperty("timeUpdateList")), TimeUnit.MILLISECONDS);
+		
+		
 		//allow user to simulate a fail/stop by typing in stop
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
 		while(this.run) {
@@ -58,6 +69,7 @@ public class GroupServer {
 				if(inFromUser.readLine().equals("stop")) {
 					System.out.println("Stopping Server");
 					this.run = false;
+					glt.interrupt();
 					inFromUser.close();
 					break;
 				}

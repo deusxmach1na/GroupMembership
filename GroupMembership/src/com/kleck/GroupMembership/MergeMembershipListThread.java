@@ -46,7 +46,7 @@ public class MergeMembershipListThread extends Thread{
 				//compare HbCounters
 				//if incoming row is greater than update 
 				if(incomingRow.getHbCounter()  > currentRow.getHbCounter()) {
-					MembershipListRow newRow = currentRow;
+					MembershipListRow newRow = incomingRow;
 					newRow.setTimeStamp();
 					mlCurrent.updateMember(inspectKey, newRow);	
 				}

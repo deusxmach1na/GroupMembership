@@ -4,7 +4,7 @@ package com.kleck.GroupMembership;
  * real simple thread just needs to update the heartbeat
  * 
  */
-public class UpdateHeartbeatThread extends Thread{
+public class UpdateHeartbeatThread implements Runnable {
 	private GroupServer gs;
 	
 	public UpdateHeartbeatThread(GroupServer gs) {

@@ -15,6 +15,7 @@ public class GossipListenThread extends Thread {
 	private int portNumber;
 	private GroupServer gs;
 	
+	
 	public GossipListenThread(int portNumber, GroupServer groupServer) {
 		this.portNumber = portNumber;
 		this.gs = groupServer;
