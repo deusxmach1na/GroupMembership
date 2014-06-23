@@ -1,15 +1,18 @@
 package com.kleck.GroupMembership;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
 
 public class GroupServer {
 	private boolean isContact;
-	//private boolean run;
+	private boolean run;
 	private String processId;
 	private String ipAddress;
 	private MembershipList ml;
@@ -23,6 +26,8 @@ public class GroupServer {
 		this.isContact = isContact;
 		this.ml = new MembershipList();
 		this.props = loadParams();
+		this.run = true;
+		
 		try {
 			this.ipAddress = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
@@ -45,6 +50,23 @@ public class GroupServer {
 			GossipSendThread gst = new GossipSendThread(contactHostname, contactPortNumber, this.ml);
 			gst.start();
 		}
+		
+		//allow user to simulate a fail/stop by typing in stop
+		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		while(this.run) {
+			try {
+				if(inFromUser.readLine().equals("stop")) {
+					System.out.println("Stopping Server");
+					this.run = false;
+					inFromUser.close();
+					break;
+				}
+			} catch (IOException e) {
+				System.out.println("could not get input from user");
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 	

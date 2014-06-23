@@ -1,3 +1,7 @@
 #settings file
 
 contactserver=localhost,6665
+timeFail=1000
+timeGossip=500
+timeUpdateHeartbeat=1000
+timeUpdateList=1000
