@@ -23,8 +23,8 @@ public class MergeMembershipListThread extends Thread{
 		//need a list of all keys in both ML's
 		ArrayList<String> allKeys = new ArrayList<String>();
 		
-		System.out.println("Merged This List\n");
-		System.out.println(mlCurrent.toString());
+		//System.out.println("Merged This List\n");
+		//System.out.println(mlCurrent.toString());
 		
 		for(String key:mlIncoming.getKeys()) {
 			allKeys.add(key);
@@ -67,10 +67,12 @@ public class MergeMembershipListThread extends Thread{
 			}
 			//if the incoming list does not have the entry then do nothing
 		}
+		/*
 		System.out.println("With This List\n");
 		System.out.println(mlIncoming.toString());
 		System.out.println("And Got This List\n");
-		System.out.println(mlCurrent.toString());
+		*/
+		System.out.println("Updated List = " + mlCurrent.toString());
 		
 		
 		return mlCurrent;

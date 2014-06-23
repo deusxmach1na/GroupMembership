@@ -37,11 +37,10 @@ public class RandomGossipThread extends Thread {
 				String ipAddress = this.gs.getMembershipList().getMember(randomId).getIpAddress();
 				int portNumber = this.gs.getMembershipList().getMember(randomId).getPortNumber();
 				GossipSendThread gst = new GossipSendThread(ipAddress, portNumber, this.gs.getMembershipList());
-				System.out.println("sending thread started");
+				//System.out.println("sending thread started");
 				gst.start();
 			}
 		}
-		
 		
 	}
 

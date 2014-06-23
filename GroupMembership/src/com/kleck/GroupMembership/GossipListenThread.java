@@ -47,7 +47,7 @@ public class GossipListenThread extends Thread {
 					e.printStackTrace();
 				}
 	        	ml = (MembershipList) temp;
-	        	System.out.println("RECEIVED: " +  ml.toString());
+	        	//System.out.println("RECEIVED: " +  ml.toString());
 	        	
 	        	//spin up a new thread to merge the two lists
 	        	MergeMembershipListThread mmlt = new MergeMembershipListThread(ml, this.gs);
