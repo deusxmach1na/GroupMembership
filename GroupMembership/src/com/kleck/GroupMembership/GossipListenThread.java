@@ -32,28 +32,28 @@ public class GossipListenThread extends Thread {
 	
 	public void run() {
 		byte[] receiveData = new byte[2048];
-        while(true) {
-        	try {
-	        	DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-	        	server.receive(receivePacket);
-	        	ByteArrayInputStream bis = new ByteArrayInputStream(receivePacket.getData());
-	        	ObjectInput in = new ObjectInputStream(bis);
-	        	MembershipList ml = null;
-	        	Object temp = null;
-	        	try {
-	        		temp = in.readObject();
+		while(true) {
+			try {
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				server.receive(receivePacket);
+				ByteArrayInputStream bis = new ByteArrayInputStream(receivePacket.getData());
+				ObjectInput in = new ObjectInputStream(bis);
+				MembershipList ml = null;
+				Object temp = null;
+				try {
+					temp = in.readObject();
 				} catch (ClassNotFoundException e) {
 					System.out.println("Did not find Membership List object");
 					e.printStackTrace();
 				}
-	        	ml = (MembershipList) temp;
-	        	//System.out.println("RECEIVED: " +  ml.toString());
-	        	
-	        	//spin up a new thread to merge the two lists
-	        	MergeMembershipListThread mmlt = new MergeMembershipListThread(ml, this.gs);
-	        	//System.out.println(this.gs.getMembershipList().toString());
-	        	mmlt.start();
-	        	/*
+				ml = (MembershipList) temp;
+				//System.out.println("RECEIVED: " +  ml.toString());
+
+				//spin up a new thread to merge the two lists
+				MergeMembershipListThread mmlt = new MergeMembershipListThread(ml, this.gs);
+				//System.out.println(this.gs.getMembershipList().toString());
+				mmlt.start();
+				/*
 	        	try {
 					mmlt.join();
 				} catch (InterruptedException e) {
@@ -61,22 +61,20 @@ public class GossipListenThread extends Thread {
 					e.printStackTrace();
 				}
 	        	System.out.println(this.gs.getMembershipList().toString());
-	        	*/
-	        	
-	        	//if it's the first time the server
-	        	
-	        	
-        	}        	
-        	catch(EOFException e) {
-        		System.out.println("End of File Error\n");
-        		e.printStackTrace();
-        	}
-        	catch(IOException e) {
-        		System.out.println("I/O issue on the server side");
-        		e.printStackTrace();
-        	}        	
+				 */
 
-        }
-	}
-	
+				//if it's the first time the server
+
+
+			}        	
+			catch(EOFException e) {
+				System.out.println("End of File Error\n");
+				e.printStackTrace();
+			}
+			catch(IOException e) {
+				System.out.println("I/O issue on the server side");
+				e.printStackTrace();
+			}        	
+		}
+	}	
 }
