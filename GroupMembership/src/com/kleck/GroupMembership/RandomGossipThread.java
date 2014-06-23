@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Set;
 
 /*
- * needs to choose server(s) at random to gossip to
+ * needs to choose log(n) server(s) at random to gossip to
  * 
  * 
  */
@@ -14,9 +14,9 @@ public class RandomGossipThread extends Thread {
 	private GroupServer gs;
 	private int numGossips;
 	
-	public RandomGossipThread (GroupServer gs, int numGossips) {
+	public RandomGossipThread (GroupServer gs) {
 		this.gs = gs;
-		this.numGossips = numGossips;
+		this.numGossips = (int) Math.log(gs.getMembershipList().size());
 	}
 	
 	public void run() {
