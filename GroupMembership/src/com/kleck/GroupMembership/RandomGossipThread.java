@@ -17,6 +17,7 @@ public class RandomGossipThread extends Thread {
 	public RandomGossipThread (GroupServer gs) {
 		this.gs = gs;
 		this.numGossips = 2;
+		//this.numGossips = (int)(Math.log(gs.getMembershipList().size())/Math.log(2));
 	}
 	
 	public void run() {
