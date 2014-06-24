@@ -49,8 +49,8 @@ public class MergeMembershipListThread extends Thread{
 					MembershipListRow newRow = incomingRow;
 					newRow.setTimeStamp();
 					mlCurrent.updateMember(inspectKey, newRow);
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#UPDATE#" + inspectKey + mlCurrent.getMember(inspectKey));
-					lt.start();	
+					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#UPDATE#" + inspectKey + mlCurrent.getMember(inspectKey));
+					//lt.start();	
 				}
 			}	
 			//if the current list does not have the key then add entry
@@ -59,8 +59,8 @@ public class MergeMembershipListThread extends Thread{
 				if(!mlIncoming.getMember(inspectKey).isDeletable()) {
 					mlCurrent.addNewMember(inspectKey, mlIncoming.getMember(inspectKey).getPortNumber());
 					mlCurrent.getMember(inspectKey).setTimeStamp();
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST#" + inspectKey + mlCurrent.getMember(inspectKey));
-					lt.start();
+					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST#" + inspectKey + mlCurrent.getMember(inspectKey));
+					//lt.start();
 				}
 				//if this is the contact server and it is adding a new record then send your membership list back
 				//JOIN
@@ -69,8 +69,8 @@ public class MergeMembershipListThread extends Thread{
 												mlIncoming.getMember(inspectKey).getPortNumber(),
 												mlCurrent);
 					gst.start();
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#JOIN#" + inspectKey + mlCurrent.getMember(inspectKey));
-					lt.start();
+					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#JOIN#" + inspectKey + mlCurrent.getMember(inspectKey));
+					//lt.start();
 				}	
 				
 			}
@@ -81,7 +81,7 @@ public class MergeMembershipListThread extends Thread{
 		System.out.println(mlIncoming.toString());
 		System.out.println("And Got This List\n");
 		*/
-		//System.out.println("Updated List = " + mlCurrent.toString());
+		System.out.println("Updated List = " + mlCurrent.toString());
 		
 		
 		return mlCurrent;
