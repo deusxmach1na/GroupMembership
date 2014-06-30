@@ -1,36 +1,39 @@
 package com.kleck.GroupMembership;
 
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
+import org.apache.log4j.Logger;
+//import org.apache.log4j.BasicConfigurator;
+//import java.io.IOException;
+//import java.util.logging.FileHandler;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+//import java.util.logging.SimpleFormatter;
 
 public class LoggerThread extends Thread {
-	private Logger logger; 
-    private FileHandler fileHandler;  
-    private String log;
+	//private Logger logger; 
+    //private FileHandler fileHandler;  
+    private String logMe;
     private String processId;
-	
-	public LoggerThread(String processId, String log) {
-		this.logger = Logger.getLogger("MyLog");
+	private static org.apache.log4j.Logger log = Logger.getRootLogger();
+    
+	public LoggerThread(String processId, String logMe) {
+		//this.logger = Logger.getLogger("MyLog");
 		this.processId = processId;
-		this.log = log;
+		this.logMe = logMe;
 	}
 	
-	public synchronized void run() {
+	public void run() {
     	
 	    try {  
-	    	this.fileHandler = new FileHandler(this.processId + ".log", true);
-	        logger.addHandler(fileHandler);  
+	    	//this.fileHandler = new FileHandler(this.processId + ".log", true);
+	        //logger.addHandler(fileHandler);  
 	        //logger.setLevel(Level.ALL);  
-	        SimpleFormatter formatter = new SimpleFormatter();  
-	        fileHandler.setFormatter(formatter);  
+	        //SimpleFormatter formatter = new SimpleFormatter();  
+	        //fileHandler.setFormatter(formatter);  
 	          
-	        logger.info(processId + log);  
-	          
+	        //logger.log(Level.ALL, processId + log);  
+	        log.info(this.processId + " - " + this.logMe);
 	    } catch (SecurityException e) {  
-	        e.printStackTrace();  
-	    } catch (IOException e) {  
 	        e.printStackTrace();  
 	    }  
 	}

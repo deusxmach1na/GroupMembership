@@ -59,8 +59,8 @@ public class MergeMembershipListThread extends Thread{
 				if(!mlIncoming.getMember(inspectKey).isDeletable()) {
 					mlCurrent.addNewMember(inspectKey, mlIncoming.getMember(inspectKey).getPortNumber());
 					mlCurrent.getMember(inspectKey).setTimeStamp();
-					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST#" + inspectKey + mlCurrent.getMember(inspectKey));
-					//lt.start();
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST#" + inspectKey + mlCurrent.getMember(inspectKey));
+					lt.start();
 				}
 				//if this is the contact server and it is adding a new record then send your membership list back
 				//JOIN
@@ -69,8 +69,8 @@ public class MergeMembershipListThread extends Thread{
 												mlIncoming.getMember(inspectKey).getPortNumber(),
 												mlCurrent);
 					gst.start();
-					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#JOIN#" + inspectKey + mlCurrent.getMember(inspectKey));
-					//lt.start();
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#JOIN#" + inspectKey + mlCurrent.getMember(inspectKey));
+					lt.start();
 				}	
 				
 			}
