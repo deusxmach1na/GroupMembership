@@ -24,18 +24,18 @@ public class UpdateMembershipListThread extends Thread {
 			//mark as deletable if it's been timeFail milliseconds
 			//DELETE
 			if((currentTime - compareTime) > timeFail && !key.equals(this.gs.getProcessId())) {
-				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#DELETE#" + key + this.gs.getMembershipList().getMember(key));
+				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#DELETE#" + key);
 				lt.start();	
 				this.gs.getMembershipList().getMember(key).setDeletable(true);
-				System.out.println(key + " DELETE");
+				//System.out.println(key + " DELETE");
 			}			
 			//delete if it is marked as isDeletable and has passed 2 * timeFail milliseconds
 			//REMOVE
 			if((currentTime - compareTime) > 2 * timeFail && this.gs.getMembershipList().getMember(key).isDeletable()) {
-				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVE#" + key + this.gs.getMembershipList().getMember(key));
+				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVE#" + key);
 				lt.start();	
 				this.gs.getMembershipList().removeMember(key);
-				System.out.println(key + " REMOVE");
+				//System.out.println(key + " REMOVE");
 			}		
 			
 		}

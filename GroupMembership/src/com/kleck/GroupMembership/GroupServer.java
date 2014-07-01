@@ -19,6 +19,9 @@ public class GroupServer {
 	private String processId;
 	private String ipAddress;
 	private MembershipList ml;
+	private int bytesused;
+	private long runtime;
+	private long starttime;
 
 	private int portNumber;
 	Properties props;
@@ -30,6 +33,9 @@ public class GroupServer {
 		this.ml = new MembershipList();
 		this.props = loadParams();
 		this.run = true;
+		this.bytesused = 0;
+		this.runtime = 0;
+		this.starttime = System.currentTimeMillis();
 		
 		try {
 			this.ipAddress = InetAddress.getLocalHost().getHostAddress();
@@ -37,7 +43,7 @@ public class GroupServer {
 			System.out.println("Could not get host address");
 			e.printStackTrace();
 		}
-		this.processId = Long.toString(System.currentTimeMillis()) + "" + this.ipAddress; 
+		this.processId = Long.toString(System.currentTimeMillis()) + "-" + this.ipAddress; 
 		
 		//add yourself to your membership list
 		ml.addNewMember(processId, this.portNumber);
@@ -50,7 +56,7 @@ public class GroupServer {
 		if(!this.isContact) {
 			String contactHostname = props.getProperty("contactserver").split(",")[0];
 			int contactPortNumber = Integer.parseInt(props.getProperty("contactserver").split(",")[1]);
-			GossipSendThread gst = new GossipSendThread(contactHostname, contactPortNumber, this.ml);
+			GossipSendThread gst = new GossipSendThread(contactHostname, contactPortNumber, this);
 			gst.start();
 		}
 		
@@ -151,4 +157,24 @@ public class GroupServer {
 	public String getProcessId() {
 		return this.processId;
 	}
+	
+	public int getBytesUsed() {
+		return bytesused;
+	}
+
+
+	public void updateBytesUsed(int bytesused) {
+		this.bytesused += bytesused;
+	}
+
+
+	public void updateRunTime() {
+		this.runtime = System.currentTimeMillis() - this.starttime;
+		System.out.println("*********************");
+		System.out.println("**BANDWIDTH = " + this.bytesused * 1.000 / (this.runtime / 1000));
+		System.out.println("*********************");
+		System.out.println(this.bytesused);
+		System.out.println(this.runtime);
+	}
+
 }

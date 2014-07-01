@@ -37,7 +37,7 @@ public class RandomGossipThread extends Thread {
 			if(!completedGossips.contains(randomId) && !randomId.equals(this.gs.getProcessId())) {
 				String ipAddress = this.gs.getMembershipList().getMember(randomId).getIpAddress();
 				int portNumber = this.gs.getMembershipList().getMember(randomId).getPortNumber();
-				GossipSendThread gst = new GossipSendThread(ipAddress, portNumber, this.gs.getMembershipList());
+				GossipSendThread gst = new GossipSendThread(ipAddress, portNumber, this.gs);
 				//System.out.println("sending thread started");
 				gst.start();
 			}

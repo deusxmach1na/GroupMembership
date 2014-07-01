@@ -31,9 +31,10 @@ public class GossipListenThread extends Thread {
 	}
 	
 	public void run() {
-		byte[] receiveData = new byte[2048];
+		byte[] receiveData = new byte[10000];
 		while(true) {
 			try {
+				
 				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 				server.receive(receivePacket);
 				ByteArrayInputStream bis = new ByteArrayInputStream(receivePacket.getData());
@@ -44,6 +45,9 @@ public class GossipListenThread extends Thread {
 					temp = in.readObject();
 				} catch (ClassNotFoundException e) {
 					System.out.println("Did not find Membership List object");
+					e.printStackTrace();
+				} catch (EOFException e) {
+					System.out.println("EOF Exception");
 					e.printStackTrace();
 				}
 				ml = (MembershipList) temp;

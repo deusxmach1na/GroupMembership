@@ -13,8 +13,8 @@ public class MergeMembershipListThread extends Thread{
 	}
 
 	public void run() {
-		MembershipList mlCurrent = gs.getMembershipList();
-		gs.setMembershipList(mergeLists(this.mlIncoming, mlCurrent));
+		MembershipList mlCurrent = this.gs.getMembershipList();
+		gs.setMembershipList(mergeLists(this.mlIncoming, mlCurrent));  
 		//System.out.println(this.gs.getMembershipList().toString());
 	}
 
@@ -26,12 +26,14 @@ public class MergeMembershipListThread extends Thread{
 		//System.out.println("Merged This List\n");
 		//System.out.println(mlCurrent.toString());
 		
+		//add keys
 		for(String key:mlIncoming.getKeys()) {
 			allKeys.add(key);
 		}
 		for(String key:mlCurrent.getKeys()) {
-			if(!allKeys.contains(key))
+			if(!allKeys.contains(key)) {
 				allKeys.add(key);
+			}
 		}
 		
 		//we have the current keys now compare heartbeats
@@ -45,12 +47,15 @@ public class MergeMembershipListThread extends Thread{
 				
 				//compare HbCounters
 				//if incoming row is greater than update 
+				//UPDATE
 				if(incomingRow.getHbCounter()  > currentRow.getHbCounter()) {
 					MembershipListRow newRow = incomingRow;
 					newRow.setTimeStamp();
 					mlCurrent.updateMember(inspectKey, newRow);
-					//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#UPDATE#" + inspectKey + mlCurrent.getMember(inspectKey));
-					//lt.start();	
+					if(newRow.isDeletable()) {
+						LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#SET_ROW_DELETABLE_FROM#" + inspectKey);
+						lt.start();	
+					}
 				}
 			}	
 			//if the current list does not have the key then add entry
@@ -59,17 +64,18 @@ public class MergeMembershipListThread extends Thread{
 				if(!mlIncoming.getMember(inspectKey).isDeletable()) {
 					mlCurrent.addNewMember(inspectKey, mlIncoming.getMember(inspectKey).getPortNumber());
 					mlCurrent.getMember(inspectKey).setTimeStamp();
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST#" + inspectKey + mlCurrent.getMember(inspectKey));
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST_JOIN#" + inspectKey);
 					lt.start();
 				}
+
 				//if this is the contact server and it is adding a new record then send your membership list back
 				//JOIN
 				if(this.gs.isContact() && mlIncoming.size() == 1) {
 					GossipSendThread gst = new GossipSendThread(mlIncoming.getMember(inspectKey).getIpAddress(),
 												mlIncoming.getMember(inspectKey).getPortNumber(),
-												mlCurrent);
+												this.gs);
 					gst.start();
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#JOIN#" + inspectKey + mlCurrent.getMember(inspectKey));
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ACCEPTING_PROCESS#" + inspectKey);
 					lt.start();
 				}	
 				
@@ -81,7 +87,7 @@ public class MergeMembershipListThread extends Thread{
 		System.out.println(mlIncoming.toString());
 		System.out.println("And Got This List\n");
 		*/
-		System.out.println("Updated List = " + mlCurrent.toString());
+		//System.out.println("Updated List = " + mlCurrent.toString());
 		
 		
 		return mlCurrent;
