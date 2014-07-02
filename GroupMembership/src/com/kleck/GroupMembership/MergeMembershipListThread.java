@@ -52,10 +52,6 @@ public class MergeMembershipListThread extends Thread{
 					MembershipListRow newRow = incomingRow;
 					newRow.setTimeStamp();
 					mlCurrent.updateMember(inspectKey, newRow);
-					if(newRow.isDeletable()) {
-						LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#SET_ROW_DELETABLE_FROM#" + inspectKey);
-						lt.start();	
-					}
 				}
 			}	
 			//if the current list does not have the key then add entry

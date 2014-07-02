@@ -18,6 +18,7 @@ class MembershipListRow implements Serializable {
 	private int hbCounter;
 	private long timeStamp;
 	private boolean isDeletable;
+	private boolean hasLeft;
 	private HashMap<String, String> mr;
 
 	public MembershipListRow(String processId, int portNumber) {
@@ -25,6 +26,7 @@ class MembershipListRow implements Serializable {
 		this.setPortNumber(portNumber);
 		this.hbCounter = 0;
 		this.isDeletable = false;
+		this.setHasLeft(false);
 		setIpAddress();
 		setTimeStamp();
 		mr = new HashMap<String, String>();
@@ -103,6 +105,14 @@ class MembershipListRow implements Serializable {
 
 	public void setPortNumber(int portNumber) {
 		this.portNumber = portNumber;
+	}
+
+	public boolean isHasLeft() {
+		return hasLeft;
+	}
+
+	public void setHasLeft(boolean hasLeft) {
+		this.hasLeft = hasLeft;
 	}
 	
 }

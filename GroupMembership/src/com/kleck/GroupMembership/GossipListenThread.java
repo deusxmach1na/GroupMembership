@@ -14,13 +14,15 @@ public class GossipListenThread extends Thread {
 	private DatagramSocket server;
 	private int portNumber;
 	private GroupServer gs;
-	
-	
+	private boolean stop;
+
+
 	public GossipListenThread(int portNumber, GroupServer groupServer) {
 		this.portNumber = portNumber;
 		this.gs = groupServer;
+		this.stop = false;
 		try {
-			this.server = new DatagramSocket(this.portNumber);
+			this.setServer(new DatagramSocket(this.portNumber));
 		} catch (BindException e) {
 			System.out.println("Could not start server.  The port is in use.");
 			System.exit(1);
@@ -32,11 +34,10 @@ public class GossipListenThread extends Thread {
 	
 	public void run() {
 		byte[] receiveData = new byte[10000];
-		while(true) {
+		while(true && !this.stop) {
 			try {
-				
 				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-				server.receive(receivePacket);
+				getServer().receive(receivePacket);
 				ByteArrayInputStream bis = new ByteArrayInputStream(receivePacket.getData());
 				ObjectInput in = new ObjectInputStream(bis);
 				MembershipList ml = null;
@@ -69,8 +70,10 @@ public class GossipListenThread extends Thread {
 
 				//if it's the first time the server
 
-
-			}        	
+			}      	
+			catch(SocketException e) {
+				System.out.println("Gossip Thread Stopped.\n");
+			}       	
 			catch(EOFException e) {
 				System.out.println("End of File Error\n");
 				e.printStackTrace();
@@ -80,5 +83,21 @@ public class GossipListenThread extends Thread {
 				e.printStackTrace();
 			}        	
 		}
+	}
+
+	public DatagramSocket getServer() {
+		return server;
+	}
+
+	public void setServer(DatagramSocket server) {
+		this.server = server;
 	}	
+	
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
 }

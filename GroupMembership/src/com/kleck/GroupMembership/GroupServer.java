@@ -15,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 public class GroupServer {
 	private boolean isContact;
-	private boolean run;
 	private String processId;
 	private String ipAddress;
 	private MembershipList ml;
@@ -32,7 +31,6 @@ public class GroupServer {
 		this.isContact = isContact;
 		this.ml = new MembershipList();
 		this.props = loadParams();
-		this.run = true;
 		this.bytesused = 0;
 		this.runtime = 0;
 		this.starttime = System.currentTimeMillis();
@@ -70,12 +68,24 @@ public class GroupServer {
 		
 		//allow user to simulate a fail/stop by typing in stop
 		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-		while(this.run) {
+		while(true) {
 			try {
 				if(inFromUser.readLine().equals("stop")) {
-					System.out.println("Stopping Server");
-					this.run = false;
-					glt.interrupt();
+					System.out.println("Stopping Server");					
+					
+					//clean up threads
+					scheduledThreadPool.shutdown();
+					
+					this.ml.getMember(this.processId).setHasLeft(true);
+					UpdateHeartbeatThread lastHeartbeat = new UpdateHeartbeatThread(this);
+					RandomGossipThread lastGossip = new RandomGossipThread(this);
+					lastGossip.start();
+					lastHeartbeat.run();
+					
+					//clean up everything else
+					//scheduledThreadPool.shutdown();
+					glt.setStop(true);
+					glt.getServer().close();
 					inFromUser.close();
 					break;
 				}

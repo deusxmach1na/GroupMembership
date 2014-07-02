@@ -1,4 +1,5 @@
 #settings file
+#everything is in ms, so 1000 ms = 1 s
 
 contactserver=localhost,6665
 timeFail=1000

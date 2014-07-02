@@ -24,19 +24,33 @@ public class UpdateMembershipListThread extends Thread {
 			//mark as deletable if it's been timeFail milliseconds
 			//DELETE
 			if((currentTime - compareTime) > timeFail && !key.equals(this.gs.getProcessId())) {
-				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#DELETE#" + key);
-				lt.start();	
+				//LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#DELETE#" + key);
+				//lt.start();	
 				this.gs.getMembershipList().getMember(key).setDeletable(true);
 				//System.out.println(key + " DELETE");
-			}			
+			}	
+			
+			//mark as do NOT DELETE if it has responded
+			if((currentTime - compareTime) <= timeFail) {
+				this.gs.getMembershipList().getMember(key).setDeletable(false);
+			}
+			
 			//delete if it is marked as isDeletable and has passed 2 * timeFail milliseconds
 			//REMOVE
 			if((currentTime - compareTime) > 2 * timeFail && this.gs.getMembershipList().getMember(key).isDeletable()) {
-				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVE#" + key);
+				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_FAILED_PROCESS#" + key);
 				lt.start();	
 				this.gs.getMembershipList().removeMember(key);
 				//System.out.println(key + " REMOVE");
-			}		
+			}	
+			
+			//if process has left voluntarily mark it as such
+			//LEFT VOLUNTARILY
+			if(this.gs.getMembershipList().getMember(key).isHasLeft()) {
+				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_LEFT_VOLUNTARILY#" + key);
+				lt.start();	
+				this.gs.getMembershipList().removeMember(key);	
+			}
 			
 		}
 	}
