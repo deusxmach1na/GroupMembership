@@ -44,7 +44,7 @@ public class GroupServer {
 		this.processId = Long.toString(System.currentTimeMillis()) + "-" + this.ipAddress; 
 		
 		//add yourself to your membership list
-		ml.addNewMember(processId, this.portNumber);
+		ml.addNewMember(processId, this.portNumber, this.isContact);
 		
 		//start listening for gossip
 		GossipListenThread glt = new GossipListenThread(this.portNumber, this);

@@ -17,8 +17,8 @@ public class MembershipList implements Serializable {
 		this.ml = new ConcurrentHashMap<String, MembershipListRow>();	
 	}
 	
-	public void addNewMember(String processId, int portNumber) {
-		this.ml.putIfAbsent(processId, new MembershipListRow(processId, portNumber));
+	public void addNewMember(String processId, int portNumber, boolean isContact) {
+		this.ml.putIfAbsent(processId, new MembershipListRow(processId, portNumber, isContact));
 	}
 	
 	public void removeMember(String processId) {

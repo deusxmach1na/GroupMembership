@@ -19,13 +19,17 @@ class MembershipListRow implements Serializable {
 	private long timeStamp;
 	private boolean isDeletable;
 	private boolean hasLeft;
+	private boolean isContact;
+
+
 	private HashMap<String, String> mr;
 
-	public MembershipListRow(String processId, int portNumber) {
+	public MembershipListRow(String processId, int portNumber, boolean isContact) {
 		this.processId = processId;
 		this.setPortNumber(portNumber);
 		this.hbCounter = 0;
 		this.isDeletable = false;
+		this.isContact = isContact;
 		this.setHasLeft(false);
 		setIpAddress();
 		setTimeStamp();
@@ -114,5 +118,12 @@ class MembershipListRow implements Serializable {
 	public void setHasLeft(boolean hasLeft) {
 		this.hasLeft = hasLeft;
 	}
-	
+
+	public boolean isContact() {
+		return isContact;
+	}
+
+	public void setContact(boolean isContact) {
+		this.isContact = isContact;
+	}
 }

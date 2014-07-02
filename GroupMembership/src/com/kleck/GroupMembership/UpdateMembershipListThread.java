@@ -47,9 +47,17 @@ public class UpdateMembershipListThread extends Thread {
 			//if process has left voluntarily mark it as such
 			//LEFT VOLUNTARILY
 			if(this.gs.getMembershipList().getMember(key).isHasLeft()) {
-				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_LEFT_VOLUNTARILY#" + key);
-				lt.start();	
-				this.gs.getMembershipList().removeMember(key);	
+				//if it is not the contact server remove it
+				//leave the contact server in so when it rejoins it can be updated
+				if(!this.gs.getMembershipList().getMember(key).isContact()) {
+					this.gs.getMembershipList().removeMember(key);	
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_LEFT_VOLUNTARILY#" + key);
+					lt.start();	
+				}
+				else {
+					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#CONTACT_SERVER_LEFT_VOLUNTARILY_DO_NOT_REMOVE#" + key);
+					lt.start();	
+				}
 			}
 			
 		}
