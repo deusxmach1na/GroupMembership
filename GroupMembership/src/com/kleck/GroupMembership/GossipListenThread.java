@@ -72,7 +72,7 @@ public class GossipListenThread extends Thread {
 
 			}      	
 			catch(SocketException e) {
-				System.out.println("Gossip Thread Stopped.\n");
+				//System.out.println("Gossip Socket Closed.\n");
 			}       	
 			catch(EOFException e) {
 				System.out.println("End of File Error\n");

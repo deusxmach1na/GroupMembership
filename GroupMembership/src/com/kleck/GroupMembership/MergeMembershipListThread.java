@@ -57,7 +57,7 @@ public class MergeMembershipListThread extends Thread{
 			//if the current list does not have the key then add entry
 			else if(!mlCurrent.hasKey(inspectKey) && mlIncoming.hasKey(inspectKey)) {
 				//ADD_TO_LIST
-				if(!mlIncoming.getMember(inspectKey).isDeletable()) {
+				if(!mlIncoming.getMember(inspectKey).isDeletable() && !mlIncoming.getMember(inspectKey).isHasLeft()) {
 					mlCurrent.addNewMember(inspectKey, mlIncoming.getMember(inspectKey).getPortNumber());
 					mlCurrent.getMember(inspectKey).setTimeStamp();
 					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#ADD_TO_LIST_JOIN#" + inspectKey);
