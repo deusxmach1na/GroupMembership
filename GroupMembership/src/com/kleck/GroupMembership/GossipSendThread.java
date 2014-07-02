@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+//import java.util.Random;
 
 public class GossipSendThread extends Thread{
 	public String ipAddress;
@@ -35,6 +36,14 @@ public class GossipSendThread extends Thread{
 			//send the packet to the appropriate place
 			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, this.portNumber);
 			clientSocket.send(sendPacket);
+			
+			//simulate packet loss
+			/*
+			Random rand = new Random();
+			if(rand.nextInt(100) > 49) {  //0-99  need 1, 5, 15, 50
+				clientSocket.send(sendPacket);
+			}
+			*/
 			
 			//measurements
 			//bytesUsed = bos.size();

@@ -15,7 +15,7 @@ public class LoggerThread extends Thread {
     private FileHandler fileHandler;  
     private String logMe;
     private String processId;
-	private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getRootLogger();
+	//private static org.apache.log4j.Logger log = org.apache.log4j.Logger.getRootLogger();
     
 	public LoggerThread(String processId, String logMe) {
 		this.logger = Logger.getLogger("MyLog");
@@ -33,7 +33,7 @@ public class LoggerThread extends Thread {
 	        fileHandler.setFormatter(formatter);  
 	          
 	        logger.log(Level.ALL, processId + this.logMe);  
-	        log.info(this.processId + " - " + this.logMe);
+	        //log.info(this.processId + " - " + this.logMe);
 	        this.fileHandler.close();
 	    } catch (SecurityException e) {  
 	        e.printStackTrace();  

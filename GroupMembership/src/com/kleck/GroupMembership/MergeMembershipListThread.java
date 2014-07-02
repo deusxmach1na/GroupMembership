@@ -66,7 +66,7 @@ public class MergeMembershipListThread extends Thread{
 
 				//if this is the contact server and it is adding a new record then send your membership list back
 				//JOIN
-				if(this.gs.isContact()) {
+				if(this.gs.isContact() && mlIncoming.size() == 1) {
 					GossipSendThread gst = new GossipSendThread(mlIncoming.getMember(inspectKey).getIpAddress(),
 												mlIncoming.getMember(inspectKey).getPortNumber(),
 												this.gs);

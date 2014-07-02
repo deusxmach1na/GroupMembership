@@ -35,30 +35,23 @@ public class UpdateMembershipListThread extends Thread {
 				this.gs.getMembershipList().getMember(key).setDeletable(false);
 			}
 			
+			
+			//if process has left voluntarily mark it as such
+			//LEFT VOLUNTARILY
+			if(this.gs.getMembershipList().getMember(key).isHasLeft()) {
+				this.gs.getMembershipList().removeMember(key);	
+				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_LEFT_VOLUNTARILY#" + key);
+				lt.start();	
+	
+			}
 			//delete if it is marked as isDeletable and has passed 2 * timeFail milliseconds
 			//REMOVE
-			if((currentTime - compareTime) > 2 * timeFail && this.gs.getMembershipList().getMember(key).isDeletable()) {
+			else if((currentTime - compareTime) > 2 * timeFail && this.gs.getMembershipList().getMember(key).isDeletable()) {
 				LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_FAILED_PROCESS#" + key);
 				lt.start();	
 				this.gs.getMembershipList().removeMember(key);
 				//System.out.println(key + " REMOVE");
 			}	
-			
-			//if process has left voluntarily mark it as such
-			//LEFT VOLUNTARILY
-			if(this.gs.getMembershipList().getMember(key).isHasLeft()) {
-				//if it is not the contact server remove it
-				//leave the contact server in so when it rejoins it can be updated
-				if(!this.gs.getMembershipList().getMember(key).isContact()) {
-					this.gs.getMembershipList().removeMember(key);	
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#REMOVED_LEFT_VOLUNTARILY#" + key);
-					lt.start();	
-				}
-				else {
-					LoggerThread lt = new LoggerThread(this.gs.getProcessId(), "#CONTACT_SERVER_LEFT_VOLUNTARILY_DO_NOT_REMOVE#" + key);
-					lt.start();	
-				}
-			}
 			
 		}
 	}

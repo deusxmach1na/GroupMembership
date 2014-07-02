@@ -51,9 +51,9 @@ public class GroupServer {
 		glt.start();
 		
 		//contact the contact server to add yourself
+		String contactHostname = props.getProperty("contactserver").split(",")[0];
+		int contactPortNumber = Integer.parseInt(props.getProperty("contactserver").split(",")[1]);
 		if(!this.isContact) {
-			String contactHostname = props.getProperty("contactserver").split(",")[0];
-			int contactPortNumber = Integer.parseInt(props.getProperty("contactserver").split(",")[1]);
 			GossipSendThread gst = new GossipSendThread(contactHostname, contactPortNumber, this);
 			gst.start();
 		}
@@ -64,6 +64,7 @@ public class GroupServer {
 		scheduledThreadPool.scheduleAtFixedRate(new UpdateHeartbeatThread(this), 0, new Long(this.props.getProperty("timeUpdateHeartbeat")), TimeUnit.MILLISECONDS);
 		scheduledThreadPool.scheduleAtFixedRate(new RandomGossipThread(this), 0, new Long(this.props.getProperty("timeGossip")), TimeUnit.MILLISECONDS);
 		scheduledThreadPool.scheduleAtFixedRate(new UpdateMembershipListThread(this, new Long(this.props.getProperty("timeFail"))), 0, new Long(this.props.getProperty("timeUpdateList")), TimeUnit.MILLISECONDS);
+		//scheduledThreadPool.scheduleAtFixedRate(new GossipSendThread(contactHostname, contactPortNumber, this), 0, 15, TimeUnit.SECONDS);
 		
 		
 		//allow user to simulate a fail/stop by typing in stop
